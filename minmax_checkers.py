@@ -1,14 +1,14 @@
 import copy
 
 BOARD_SIZE = 4
-EMPTY, HUMAN, COMPUTER = '◻', '🔴', '🔷'
+EMPTY, HUMAN, COMPUTER = '⬛️', '🔴', '🔷'
 
 # initial configuration
 empty_rows = [[EMPTY] * BOARD_SIZE for i in range(BOARD_SIZE - 2)]
-human_row = [[HUMAN] * BOARD_SIZE]
-computer_row = [[COMPUTER] * BOARD_SIZE]
+human_row = [HUMAN] * BOARD_SIZE
+computer_row = [COMPUTER] * BOARD_SIZE
 # board will always keep the current state of the game
-board = [*computer_row, *empty_rows, *human_row]
+board = [computer_row, *empty_rows, human_row]
 
 
 def pretty_print_board(b):
@@ -20,7 +20,7 @@ def pretty_print_board(b):
 
 # final state check
 def is_game_over():
-    if board[0] == human_row[0] or board[BOARD_SIZE - 1] == computer_row[0]:
+    if board[0] == human_row or board[BOARD_SIZE - 1] == computer_row:
         return True
     else:
         return False
@@ -33,18 +33,18 @@ def heuristic(possible_board_configuration):
     for i in range(BOARD_SIZE):
         for j in range(BOARD_SIZE):
             if possible_board_configuration[i][j] == HUMAN:
-                syh += 3 - i
+                syh += (BOARD_SIZE - 1) - i
             elif possible_board_configuration[i][j] == COMPUTER:
-                syc += i
+                syc += (BOARD_SIZE - 1) - i
     return 12 - syc - syh
 
 
-# given a position (i,j), return all the neighbours that are available
-def get_neighbors(a, b):
+# given a position (i, j), return all the neighbours that are available
+def get_neighbors(i, j):
     return [element for element in
-            [(a + 1, b + 1), (a, b + 1), (a + 1, b), (a - 1, b + 1), (a - 1, b), (a, b - 1), (a + 1, b - 1)]
-            if 0 <= element[0] < BOARD_SIZE and 0 <= element[1] < BOARD_SIZE and board[element[0]][
-                element[1]] == EMPTY]
+            [(i + 1, j + 1), (i, j + 1), (i + 1, j), (i - 1, j - 1),
+             (i - 1, j + 1), (i - 1, j), (i, j - 1), (i + 1, j - 1)]
+            if 0 <= element[0] < BOARD_SIZE and 0 <= element[1] < BOARD_SIZE and board[element[0]][element[1]] == EMPTY]
 
 
 def get_valid_moves():
@@ -57,7 +57,7 @@ def get_valid_moves():
     return valid_moves
 
 
-# move form: [(a,b),(c,d)]
+# move form: [(a, b), (c, d)]
 def move_piece(transition, safe_board):
     safe_board[transition[1][0]][transition[1][1]] = safe_board[transition[0][0]][transition[0][1]]
     safe_board[transition[0][0]][transition[0][1]] = EMPTY
@@ -75,7 +75,7 @@ def get_best_move(valid_moves):
     return best_move_yet
 
 
-# move form: [(a,b),(c,d)]
+# move form: [(a, b), (c, d)]
 def is_valid_move_from_user(move):
     if board[move[0][0]][move[0][1]] == HUMAN and board[move[1][0]][move[1][1]] == EMPTY and move[1] in get_neighbors(
             move[0][0], move[0][1]):
@@ -106,6 +106,6 @@ def play_game():
 
 play_game()
 
-# example_board = [*human_row, *computer_row, *empty_rows]
+# example_board = [human_row, computer_row, *empty_rows]
 # pretty_print_board(example_board)
 # print(heuristic(example_board))
