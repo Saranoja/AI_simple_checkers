@@ -1,0 +1,7 @@
+interesul ambilor jucatori devine sa minimizeze no_of_advancing_moves, pastrand si logica din euristica initiala
+
+COMPUTER vrea sa MAXIMIZEZE get_simple_heuristic (la fel ca la inceput)
+    + no_of_advancing_moves MIC => numitor mic => valoare mai mare a rezultatului fractiei => valoare mai MARE a functiei
+
+HUMAN vrea sa MINIMIZEZE get_simple_heuristic (la fel ca la inceput)
+    + no_of_advancing_moves MIC => numitor mic => valoare mai mare a rezultatului fractiei => valoare mai MICA a functiei (valoare negativa mai mare -> numar mai mic)

@@ -84,37 +84,21 @@ def get_complex_heuristic(board, player):
     :param player:
     :return:
     """
-    # no_of_advancing_moves = 0.0
-    # if player == HUMAN:
-    #     no_of_advancing_moves = len(
-    #         list(filter(lambda transition: transition[0][0] + 1 == transition[1][0], get_valid_moves(board, COMPUTER))))
-    # elif player == COMPUTER:
-    #     no_of_advancing_moves = len(
-    #         list(filter(lambda transition: transition[0][0] - 1 == transition[1][0], get_valid_moves(board, HUMAN))))
-    #
-    # # no_of_advancing_moves += 1
-    # print(f'get_simple_heuristic={get_simple_heuristic(board)}')
-    # print(f'no_of_advancing_moves={no_of_advancing_moves}')
-    # # if player == COMPUTER:
-    # #     return 0.4 * get_simple_heuristic(board) - 0.6 * no_of_advancing_moves
-    # if player == HUMAN:
-    #     print(f'get_complex_heuristic={player}')
-    #     return (get_simple_heuristic(board) + no_of_advancing_moves)
-    # elif player == COMPUTER:
-    #     print(f'get_complex_heuristic={player}')
-    #     return -(get_simple_heuristic(board) + no_of_advancing_moves)
-
-    no_of_advancing_moves_human = len(
-        list(filter(lambda transition: transition[0][0] - 1 == transition[1][0], get_valid_moves(board, HUMAN))))
-    no_of_advancing_moves_computer = len(
-        list(filter(lambda transition: transition[0][0] + 1 == transition[1][0], get_valid_moves(board, COMPUTER))))
+    no_of_advancing_moves = 0.0
+    if player == HUMAN:
+        no_of_advancing_moves = len(
+            list(filter(lambda transition: transition[0][0] + 1 == transition[1][0], get_valid_moves(board, COMPUTER))))
+    elif player == COMPUTER:
+        no_of_advancing_moves = len(
+            list(filter(lambda transition: transition[0][0] - 1 == transition[1][0], get_valid_moves(board, HUMAN))))
 
     print(f'get_simple_heuristic={get_simple_heuristic(board)}')
-    print(f'no_of_advancing_moves_computer={no_of_advancing_moves_computer}')
-    print(f'no_of_advancing_moves_human={no_of_advancing_moves_human}')
-    print(
-        f'complex_heuristic={0.6 * get_simple_heuristic(board) + 0.4 * (no_of_advancing_moves_computer - no_of_advancing_moves_human)}')
-    return 0.6 * get_simple_heuristic(board) + 0.4 * (no_of_advancing_moves_computer - no_of_advancing_moves_human)
+    print(f'no_of_advancing_moves={no_of_advancing_moves}')
+
+    if player == HUMAN:
+        return - 1 / (0.4 * get_simple_heuristic(board) + 0.6 * no_of_advancing_moves)
+    elif player == COMPUTER:
+        return 1 / (1/0.4 * get_simple_heuristic(board) + 0.6 * no_of_advancing_moves)
 
 
 def alphabeta(board, depth, is_max_player, alpha, beta):
@@ -227,5 +211,5 @@ example_board = [
 #     print('')
 
 # print('INITIAL VALUE', get_complex_heuristic(example_board, HUMAN))
-print_board(alphabeta(example_board, 1, False, -inf, +inf))
+print_board(alphabeta(example_board, 1, True, -inf, +inf))
 print(f'no_of_prunes={no_of_prunes}')
