@@ -77,7 +77,7 @@ def get_heuristic(board):
     return 12 - sum_advances_computer - sum_advances_human
 
 
-def alphabeta(board, depth, is_max_player, alpha, beta):
+def alpha_beta(board, depth, is_max_player, alpha, beta):
     """
 
     :param board:
@@ -121,11 +121,11 @@ def calculate_max(board, depth, alpha, beta):
         if max_value >= beta:
             global no_of_prunes
             no_of_prunes += 1
-            print('MAX BOARD', max_value)
+            print('PRUNING FOR VALUE', max_value)
             print_board(max_board)
             return max_value, max_board
 
-    print('MAX BOARD', max_value)
+    print('Heuristic value for max board', max_value)
     print_board(max_board)
     return max_value, max_board
 
@@ -155,30 +155,24 @@ def calculate_min(board, depth, alpha, beta):
         if min_value <= alpha:
             global no_of_prunes
             no_of_prunes += 1
-            print('MIN BOARD', min_value)
+            print('PRUNING FOR VALUE', min_value)
             print_board(min_board)
             return min_value, board_state
 
-    print('MIN BOARD', min_value)
+    print('Heuristic value for min board', min_value)
     print_board(min_board)
     return min_value, min_board
 
 
 no_of_prunes = 0
 
-# EMPTY, HUMAN, COMPUTER = '⬛', '🔴', '🔷'
 example_board = [
-    ['⬛', '⬛', '⬛', '⬛', ],
-    ['⬛', '🔷', '🔴', '⬛', ],
-    ['🔴', '🔴', '⬛', '🔴', ],
-    ['🔷', '🔷', '🔷', '⬛', ],
+    [EMPTY, EMPTY, EMPTY, EMPTY, ],
+    [EMPTY, COMPUTER, HUMAN, EMPTY, ],
+    [HUMAN, HUMAN, EMPTY, HUMAN, ],
+    [COMPUTER, COMPUTER, COMPUTER, EMPTY, ],
 ]
 
-# for board in get_board_states(example_board, COMPUTER):
-#     print(get_heuristic(board))
-#     print_board(board)
-#     print('')
-
-print('INITIAL VALUE', get_heuristic(example_board))
-print_board(alphabeta(example_board, 4, False, -inf, +inf))
-print(f'no_of_prunes={no_of_prunes}')
+alpha_beta(example_board, 4, False, -inf, +inf)
+# alpha_beta(example_board, 1, True, -inf, +inf)
+print(f'Number of prunes: {no_of_prunes}')

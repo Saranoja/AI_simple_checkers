@@ -114,7 +114,7 @@ def calculate_max(board, depth):
             max_value = board_state_value
             max_board = board_state
 
-    print('MAX BOARD', max_value)
+    print('Heuristic value for max board:', max_value)
     print_board(max_board)
     return max_value, max_board
 
@@ -137,22 +137,17 @@ def calculate_min(board, depth):
             min_value = board_state_value
             min_board = board_state
 
-    print('MIN BOARD', min_value)
+    print('Heuristic value for min board', min_value)
     print_board(min_board)
     return min_value, min_board
 
-# # EMPTY, HUMAN, COMPUTER = '⬛', '🔴', '🔷'
-# example_board = [
-#     ['⬛', '⬛', '⬛', '⬛', ],
-#     ['⬛', '🔷', '🔴', '⬛', ],
-#     ['🔴', '🔴', '⬛', '🔴', ],
-#     ['🔷', '🔷', '🔷', '⬛', ],
-# ]
-#
-# # for board in get_board_states(example_board, COMPUTER):
-# #     print(get_heuristic(board))
-# #     print_board(board)
-# #     print('')
-#
-# print('INITIAIL VALUE', get_heuristic(example_board))
-# print_board(minimax(example_board, 4, False))
+
+example_board = [
+    [EMPTY, EMPTY, EMPTY, EMPTY, ],
+    [EMPTY, COMPUTER, HUMAN, EMPTY, ],
+    [HUMAN, HUMAN, EMPTY, HUMAN, ],
+    [COMPUTER, COMPUTER, COMPUTER, EMPTY, ],
+]
+
+print_board(minimax(example_board, 3, False))  # changes decision for depth=4
+# print_board(minimax(example_board, 3, True))

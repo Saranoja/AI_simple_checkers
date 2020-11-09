@@ -92,16 +92,24 @@ def get_complex_heuristic(board, player):
         no_of_advancing_moves = len(
             list(filter(lambda transition: transition[0][0] - 1 == transition[1][0], get_valid_moves(board, HUMAN))))
 
-    print(f'get_simple_heuristic={get_simple_heuristic(board)}')
-    print(f'no_of_advancing_moves={no_of_advancing_moves}')
+    heuristic = get_simple_heuristic(board)
 
     if player == HUMAN:
-        return - 1 / (0.4 * get_simple_heuristic(board) + 0.6 * no_of_advancing_moves)
+        if heuristic == 0.0 and no_of_advancing_moves == 0:
+            return 0
+        else:
+            return - 1 / (0.4 * heuristic + 0.6 * no_of_advancing_moves)
     elif player == COMPUTER:
-        return 1 / (1/0.4 * get_simple_heuristic(board) + 0.6 * no_of_advancing_moves)
+        if heuristic == 0.0:
+            if no_of_advancing_moves == 0:
+                return 0
+            else:
+                return 1 / 0.6 * no_of_advancing_moves
+        else:
+            return 1 / (1 / 0.4 * heuristic + 0.6 * no_of_advancing_moves)
 
 
-def alphabeta(board, depth, is_max_player, alpha, beta):
+def alpha_beta(board, depth, is_max_player, alpha, beta):
     """
 
     :param board:
@@ -143,18 +151,18 @@ def calculate_max(board, depth, alpha, beta):
             max_board = board_state
             alpha = max_value
 
-        print('BOARD VALUE', board_state_value)
-        print_board(board_state)
+        # print('Heuristic value for max board', board_state_value)
+        # print_board(board_state)
 
         if max_value >= beta:
             global no_of_prunes
             no_of_prunes += 1
-            print('MAX BOARD', max_value)
-            print_board(max_board)
+            # print('MAX BOARD', max_value)
+            # print_board(max_board)
             return max_value, max_board
 
-    print('MAX BOARD', max_value)
-    print_board(max_board)
+    # print('MAX BOARD', max_value)
+    # print_board(max_board)
     return max_value, max_board
 
 
@@ -180,36 +188,57 @@ def calculate_min(board, depth, alpha, beta):
             min_board = board_state
             beta = min_value
 
-        print('BOARD VALUE', board_state_value)
-        print_board(board_state)
+        # print('Heuristic value for min board', board_state_value)
+        # print_board(board_state)
 
         if min_value <= alpha:
             global no_of_prunes
             no_of_prunes += 1
-            print('MIN BOARD', min_value)
-            print_board(min_board)
+            # print('MIN BOARD', min_value)
+            # print_board(min_board)
             return min_value, board_state
 
-    print('MIN BOARD', min_value)
-    print_board(min_board)
+    # print('MIN BOARD', min_value)
+    # print_board(min_board)
     return min_value, min_board
 
 
 no_of_prunes = 0
 
-# EMPTY, HUMAN, COMPUTER = '⬛', '🔴', '🔷'
 example_board = [
-    ['⬛', '⬛', '⬛', '⬛', ],
-    ['⬛', '🔷', '🔴', '⬛', ],
-    ['🔴', '🔴', '⬛', '🔴', ],
-    ['🔷', '🔷', '🔷', '⬛', ],
+    [EMPTY, EMPTY, EMPTY, EMPTY, ],
+    [EMPTY, COMPUTER, HUMAN, EMPTY, ],
+    [HUMAN, HUMAN, EMPTY, HUMAN, ],
+    [COMPUTER, COMPUTER, COMPUTER, EMPTY, ],
 ]
 
-# for board in get_board_states(example_board, COMPUTER):
-#     print(get_heuristic(board))
-#     print_board(board)
-#     print('')
 
-# print('INITIAL VALUE', get_complex_heuristic(example_board, HUMAN))
-print_board(alphabeta(example_board, 1, True, -inf, +inf))
-print(f'no_of_prunes={no_of_prunes}')
+# print_board(example_board)  # 8 possible moves for the computer, 11 for human
+# print('-----------------\n')
+# alpha_beta(example_board, 1, True, -inf, +inf)  # max player
+# alpha_beta(example_board, 1, False, -inf, +inf) # min player
+
+
+def play_game():
+    global b
+    print("Game on")
+    print_board(b)
+    while not is_terminal_state(b):
+        move_from = (0, 0)
+        move_to = (0, 0)
+        print("Your turn: ")
+        print(get_valid_moves(b, HUMAN))
+        while [move_from, move_to] not in get_valid_moves(b, HUMAN):
+            user_piece_to_move = input('Enter coordinates of the piece you want to move, separated by space: ')
+            where_to_move = input('Enter coordinates of the cell you want to place the piece on, separated by space: ')
+            move_from = tuple(map(int, user_piece_to_move.split()))
+            move_to = tuple(map(int, where_to_move.split()))
+            if [move_from, move_to] not in get_valid_moves(b, HUMAN):
+                print("Try again :)")
+        move_piece(b, [move_from, move_to])
+        b = alpha_beta(b, 6, True, -inf, +inf)
+        print_board(b)
+        print(f'Number of prunes={no_of_prunes}')
+
+
+play_game()
