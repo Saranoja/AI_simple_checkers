@@ -115,7 +115,7 @@ def alpha_beta(board, depth, is_max_player, alpha, beta):
     :param board:
     :param depth:
     :param is_max_player:
-    :return:
+    :return: Board with move made, based on the value of is_max_player
     """
     if is_max_player:  # the computer is currently taking the turn
         # calculate the maximum value along descendants of the current node
@@ -211,12 +211,17 @@ example_board = [
     [HUMAN, HUMAN, EMPTY, HUMAN, ],
     [COMPUTER, COMPUTER, COMPUTER, EMPTY, ],
 ]
+# example_board = [
+#     [HUMAN, HUMAN, COMPUTER, HUMAN, ],
+#     [COMPUTER, COMPUTER, EMPTY, COMPUTER, ],
+#     [EMPTY, EMPTY, EMPTY, HUMAN, ],
+#     [EMPTY, EMPTY, EMPTY, EMPTY, ],
+# ]
 
-
-# print_board(example_board)  # 8 possible moves for the computer, 11 for human
-# print('-----------------\n')
-# alpha_beta(example_board, 1, True, -inf, +inf)  # max player
-# alpha_beta(example_board, 1, False, -inf, +inf) # min player
+print_board(example_board)  # 8 possible moves for the computer, 11 for human
+print('-----------------\n')
+# print_board(alpha_beta(example_board, 1, True, -inf, +inf))  # max player
+print_board(alpha_beta(example_board, 1, False, -inf, +inf))  # min player
 
 
 def play_game():
@@ -227,7 +232,7 @@ def play_game():
         move_from = (0, 0)
         move_to = (0, 0)
         print("Your turn: ")
-        print(get_valid_moves(b, HUMAN))
+        # print(get_valid_moves(b, HUMAN))
         while [move_from, move_to] not in get_valid_moves(b, HUMAN):
             user_piece_to_move = input('Enter coordinates of the piece you want to move, separated by space: ')
             where_to_move = input('Enter coordinates of the cell you want to place the piece on, separated by space: ')
@@ -240,5 +245,4 @@ def play_game():
         print_board(b)
         print(f'Number of prunes={no_of_prunes}')
 
-
-play_game()
+# play_game()

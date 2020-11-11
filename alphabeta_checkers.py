@@ -173,6 +173,7 @@ example_board = [
     [COMPUTER, COMPUTER, COMPUTER, EMPTY, ],
 ]
 
-alpha_beta(example_board, 4, False, -inf, +inf)
-# alpha_beta(example_board, 1, True, -inf, +inf)
+print_board(example_board)
+# alpha_beta(example_board, 4, False, -inf, +inf)
+alpha_beta(example_board, 1, False, -inf, +inf)
 print(f'Number of prunes: {no_of_prunes}')
